@@ -13,7 +13,7 @@ const object = {
 
             let geometry = new THREE.BoxGeometry(param.size, param.size, param.size)
             let material = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
+                color: i % 2 === 0 ? 0xffffff : 0xffff00,
                 transparent: true,
                 opacity: 0.05,
                 depthTest: false
@@ -21,7 +21,7 @@ const object = {
            
             let mesh = new THREE.Mesh(geometry, material)
             
-            let helper = new THREE.BoxHelper(mesh, 0xffffff)
+            let helper = new THREE.BoxHelper(mesh, i % 2 === 0 ? 0xffffff : 0xffff00)
             helper.material.transparent = true
             helper.material.opacity = 0.25
 

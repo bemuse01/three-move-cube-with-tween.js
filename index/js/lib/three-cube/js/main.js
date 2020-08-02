@@ -7,9 +7,9 @@ const group = {
 
 const param = {
     cube: {
-        size: 5,
+        size: 2,
         row: 3,
-        gap: 4,
+        gap: 6,
         rotation: 0.005,
         boost: 0.25
     }

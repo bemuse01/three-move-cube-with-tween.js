@@ -1,19 +1,41 @@
 const object = {
-    createPosition(length){
-        let arr = []
-        let x = [-1, 0, 1], y = [1, 0, -1], z = [1, 0, -1]
-        for(let i = 0; i < length; i++) arr[i] = {x: x[i % 3], y: y[Math.floor(i / 9)], z: z[Math.floor((i % 9) / 3)]}
+    createPosition(length, row){
+        let arr = [], size = row * row
+        let x = [], y = [], z = []
+        let start = Math.floor(row / 2)
+        let init = {x: -start, y: start, z: start}
+        
+        for(let i = 0; i < (row % 2 === 0 ? row + 1 : row); i++){
+            x[i] = init.x++
+            y[i] = init.y--
+            z[i] = init.z--
+        }
+        if(row % 2 === 0) {
+            x.splice(start, 1)
+            y.splice(start, 1)
+            z.splice(start, 1)
+            x = x.map(x => x - Math.sign(x) * 1 / 2)
+            y = y.map(x => x - Math.sign(x) * 1 / 2)
+            z = z.map(x => x - Math.sign(x) * 1 / 2)
+        }
+
+        for(let i = 0; i < length; i++) arr[i] = {x: x[i % row], y: y[Math.floor(i / size)], z: z[Math.floor((i % size) / row)]}
         return arr
     },
     createCube(scene, group, param){
-        let pos = this.createPosition(param.row ** param.row)
+        let pos = this.createPosition(param.row ** 3, param.row)
 
-        for(let i = 0; i < param.row ** param.row; i++){
+        for(let i = 0; i < param.row ** 3; i++){
             let local = new THREE.Group()
+            local.param = {
+                opacity: 1,
+                box: 0.125,
+                helper: 0.6
+            }
 
             let geometry = new THREE.BoxGeometry(param.size, param.size, param.size)
             let material = new THREE.MeshBasicMaterial({
-                color: i % 2 === 0 ? 0xffffff : 0xffff00,
+                color: i % 2 === 0 ? 0xffffff : 0xffffff,
                 transparent: true,
                 opacity: 0.125,
                 depthTest: false
@@ -21,9 +43,9 @@ const object = {
            
             let mesh = new THREE.Mesh(geometry, material)
             
-            let helper = new THREE.BoxHelper(mesh, i % 2 === 0 ? 0xffffff : 0xffff00)
+            let helper = new THREE.BoxHelper(mesh, i % 2 === 0 ? 0xffffff : 0xffffff)
             helper.material.transparent = true
-            helper.material.opacity = 0.5
+            helper.material.opacity = 0.6
 
             local.add(mesh)
             local.add(helper)
@@ -38,10 +60,10 @@ const object = {
         scene.add(group)
     },
     createCubeMixer(group, mixer, param){
-        let normal = this.createPosition(param.row ** param.row)
+        let normal = this.createPosition(param.row ** 3, param.row)
         let index = [], pos = [], random = [], ext = [], order = []
 
-        for(let i = 0; i < param.row ** param.row; i++) {
+        for(let i = 0; i < param.row ** 3; i++) {
             index[i] = i
             pos[i] = {
                 x: normal[i].x * param.size + normal[i].x * param.gap,
@@ -49,7 +71,7 @@ const object = {
                 z: normal[i].z * param.size + normal[i].z * param.gap
             }
         }
-        for(let i = 0; i < param.row ** param.row; i++) {
+        for(let i = 0; i < param.row ** 3; i++) {
             random[i] = util.shuffle(index)
             for(let j = 0; j < 3; j++) {
                 ext.push(random[i])

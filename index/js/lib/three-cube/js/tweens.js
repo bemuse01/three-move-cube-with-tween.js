@@ -1,9 +1,9 @@
 const tween = {
     createCubeTween(group, param){
-        let normal = object.createPosition(param.obj.row ** param.obj.row)
+        let normal = object.createPosition(param.obj.row ** 3, param.obj.row)
         let index = [], pos = []
 
-        for(let i = 0; i < param.obj.row ** param.obj.row; i++) {
+        for(let i = 0; i < param.obj.row ** 3; i++) {
             index[i] = i
             pos[i] = {
                 x: normal[i].x * param.obj.size + normal[i].x * param.obj.gap,
@@ -19,7 +19,7 @@ const tween = {
         group.children.forEach((e, i) => {
             let randIndex = Math.floor(Math.random() * index.length)
 
-            param.tween.start[i] = {x: e.position.x, y: e.position.y, z: e.position.z}
+            param.tween.start[i] = {x: e.position.x, y: e.position.y, z: e.position.z, opacity: e.param.opacity}
             /* param.tween.end[i] = {
                 x: [e.position.x, 0, 0, pos[random[i]].x], 
                 y: [e.position.y, 0, 0, pos[random[i]].y], 
@@ -28,7 +28,8 @@ const tween = {
             param.tween.end[i] = {
                 x: pos[random[i]].x, 
                 y: pos[random[i]].y, 
-                z: pos[random[i]].z
+                z: pos[random[i]].z,
+                opacity: Math.floor(Math.random() * 4 + 1)
             }
             /* param.tween.end[i] = {
                 x: pos[randIndex].x, 

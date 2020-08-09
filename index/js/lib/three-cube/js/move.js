@@ -9,6 +9,11 @@ const move = {
     },
     onUpdateCubeTween(child, param){
         child.position.set(param.x, param.y, param.z)
+        child.children.forEach((e, i) => {
+            if(i === 0) e.material.opacity = child.param.box / param.opacity
+            else e.material.opacity = child.param.helper / param.opacity
+        })
+        child.param.opacity = param.opacity
     },
     onRepeatCubeTween(group, param, index, pos){
         TWEEN.removeAll()

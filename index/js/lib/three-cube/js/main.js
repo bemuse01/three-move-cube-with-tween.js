@@ -2,14 +2,15 @@ const clock = new THREE.Clock()
 const radian = Math.PI / 180
 
 const group = {
-    cube: new THREE.Group()
+    cube: new THREE.Group(),
+    rotation: new THREE.Group()
 }
 
 const param = {
     cube: {
-        size: 2,
-        row: 3,
-        gap: 6,
+        size: 1.6,
+        row: 5,
+        gap: 4,
         rotation: 0.005,
         boost: 0.25
     }
@@ -27,7 +28,7 @@ const tweens = {
         start: [],
         end: [],
         time: 1500,
-        delay: 500
+        delay: 1500
     }
 }
 

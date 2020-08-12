@@ -22,7 +22,7 @@ const object = {
         for(let i = 0; i < length; i++) arr[i] = {x: x[i % row], y: y[Math.floor(i / size)], z: z[Math.floor((i % size) / row)]}
         return arr
     },
-    createCube(scene, group, param){
+    createCube(wrap, group, param){
         let pos = this.createPosition(param.row ** 3, param.row)
 
         for(let i = 0; i < param.row ** 3; i++){
@@ -37,7 +37,7 @@ const object = {
             let material = new THREE.MeshBasicMaterial({
                 color: i % 2 === 0 ? 0xffffff : 0xffffff,
                 transparent: true,
-                opacity: 0.125,
+                opacity: 0,
                 depthTest: false
             })
            
@@ -45,7 +45,7 @@ const object = {
             
             let helper = new THREE.BoxHelper(mesh, i % 2 === 0 ? 0xffffff : 0xffffff)
             helper.material.transparent = true
-            helper.material.opacity = 0.6
+            helper.material.opacity = 0
 
             local.add(mesh)
             local.add(helper)
@@ -54,10 +54,11 @@ const object = {
                 pos[i].y * param.size + pos[i].y * param.gap, 
                 pos[i].z * param.size + pos[i].z * param.gap
             )
+            local.index = i
 
             group.add(local)
         }
-        scene.add(group)
+        wrap.add(group)
     },
     createCubeMixer(group, mixer, param){
         let normal = this.createPosition(param.row ** 3, param.row)
@@ -96,5 +97,11 @@ const object = {
             mixer.clip[i] = mixer.mix[i].clipAction(clip)
             mixer.clip[i].play()
         })
+    },
+    addRotationGroup(group){
+        for(let i in group.rot) group.wrap.add(group.rot[i])
+    },
+    wrapGroups(scene, group){
+        scene.add(group.wrap)
     }
 }

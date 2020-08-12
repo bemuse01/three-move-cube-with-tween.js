@@ -1,16 +1,22 @@
 const clock = new THREE.Clock()
 const radian = Math.PI / 180
+const degree = 180 / Math.PI
 
 const group = {
     cube: new THREE.Group(),
-    rotation: new THREE.Group()
+    rot: {
+        x: new THREE.Group(),
+        y: new THREE.Group(),
+        z: new THREE.Group()
+    },
+    wrap: new THREE.Group()
 }
 
 const param = {
     cube: {
-        size: 1.6,
-        row: 5,
-        gap: 4,
+        size: 1,
+        row: 4,
+        gap: 3,
         rotation: 0.005,
         boost: 0.25
     }
@@ -25,10 +31,24 @@ const mixer = {
 
 const tweens = {
     cube: {
-        start: [],
-        end: [],
-        time: 1500,
-        delay: 1500
+        tsl: {
+            start: [],
+            end: [],
+            time: 1500,
+            delay: 1000
+        },
+        rot: {
+            start: [],
+            end: [],
+            time: 1500,
+            delay: 1000
+        },
+        opa: {
+            box: 0.125,
+            helper: 0.6,
+            time: 500,
+            delay: 16
+        }
     }
 }
 
@@ -60,18 +80,20 @@ function init(){
 }
 
 function initTweens(){
-    tween.createCubeTween(group.cube, {tween: tweens.cube, obj: param.cube})
+    tween.createCubeTween(group, {tween: tweens.cube, obj: param.cube})
 }
 
 function objects(){
-    object.createCube(scene, group.cube, param.cube)
+    object.createCube(group.wrap, group.cube, param.cube)
+    object.addRotationGroup(group)
+    object.wrapGroups(scene, group)
     // object.createCubeMixer(group.cube, mixer.cube, param.cube)
 }
 
 function moves(){
     let delta = clock.getDelta()
 
-    move.moveCube(group.cube, param.cube, mixer.cube, delta)
+    move.moveCube(group, param.cube, mixer.cube, delta)
     TWEEN.update()
 }
 
